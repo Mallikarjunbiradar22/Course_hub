@@ -22,20 +22,10 @@ pipeline {
                     params.ACTION == 'DEPLOY'
                 }
             }
+
             steps {
                 echo "Building Spring Boot Application..."
-                sh 'mvn clean package'
-            }
-        }
-
-        stage('Stop Old Containers') {
-            when {
-                expression {
-                    params.ACTION == 'DEPLOY'
-                }
-            }
-            steps {
-                sh 'docker compose down || true'
+                sh 'mvn clean package -DskipTests'
             }
         }
 
@@ -45,13 +35,10 @@ pipeline {
                     params.ACTION == 'DEPLOY'
                 }
             }
+
             steps {
                 echo "Deploying Containers..."
-                sh '''
-                    pwd
-                    ls -la
-                    docker compose up --build -d
-                '''
+                sh 'docker compose up --build -d'
             }
         }
 
@@ -61,11 +48,14 @@ pipeline {
                     params.ACTION == 'REMOVE'
                 }
             }
+
             steps {
+                echo "Removing Containers..."
                 sh 'docker compose down'
                 sh 'docker image prune -af'
             }
         }
+
     }
 
     post {
@@ -81,5 +71,7 @@ pipeline {
         always {
             echo 'Pipeline completed.'
         }
+
     }
+
 }

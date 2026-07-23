@@ -3,6 +3,7 @@ services:
   mysql-container:
     image: mysql:8.0
     container_name: mysql-container
+    restart: always
 
     environment:
       MYSQL_ROOT_PASSWORD: root
@@ -12,7 +13,7 @@ services:
       - "3306:3306"
 
     volumes:
-      - ./mysql-data:/var/lib/mysql
+      - mysql-data:/var/lib/mysql
 
     networks:
       - springboot-mysql-network
@@ -27,28 +28,31 @@ services:
   springboot-app:
     build: .
     container_name: springboot-app
-
-    ports:
-      - "8082:8080"
+    restart: always
 
     depends_on:
       mysql-container:
         condition: service_healthy
+
+    ports:
+      - "8082:8080"
 
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-container:3306/eduTrack?createDatabaseIfNotExist=true
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
 
-      MAIL_USERNAME: maheshbiradar698@gmail.com
-      MAIL_PASSWORD: xiegjhnvaolviifd
+      MAIL_USERNAME: your-email@gmail.com
+      MAIL_PASSWORD: your-app-password
 
-      RAZORPAY_KEY: rzp_test_SnNPlUI3HGsdCB
-      RAZORPAY_SECRET: x0XVhISP7TFqoDnWuDm6NyKc
+      RAZORPAY_KEY: your-razorpay-key
+      RAZORPAY_SECRET: your-razorpay-secret
 
     networks:
       - springboot-mysql-network
 
 networks:
   springboot-mysql-network:
-    name: springboot-mysql-network
+
+volumes:
+  mysql-data:

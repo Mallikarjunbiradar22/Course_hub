@@ -42,11 +42,11 @@ services:
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
 
-      MAIL_USERNAME: your-email@gmail.com
-      MAIL_PASSWORD: your-app-password
+      MAIL_USERNAME: ${MAIL_USERNAME}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
 
-      RAZORPAY_KEY: your-razorpay-key
-      RAZORPAY_SECRET: your-razorpay-secret
+      RAZORPAY_KEY: ${RAZORPAY_KEY}
+      RAZORPAY_SECRET: ${RAZORPAY_SECRET}
 
     networks:
       - springboot-mysql-network
